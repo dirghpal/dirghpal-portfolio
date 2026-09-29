@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 246 241 231; --fg: 27 26 34; --muted: 92 88 102;
+  --c1: 139 92 246; --c2: 91 60 220;
+  --glass: rgba(255, 252, 246, .68); --spot: rgba(139, 92, 246, .12);
+  --code-bg: 20 18 32;
+}
+.dark {
+  --bg: 8 8 16; --fg: 240 239 250; --muted: 158 156 184;
+  --c1: 167 139 250; --c2: 124 58 237;
+  --glass: rgba(20, 18, 36, .58); --spot: rgba(139, 92, 246, .18);
+  --code-bg: 13 12 24;
+}
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+body { background: rgb(var(--bg)); color: rgb(var(--fg)); font-family: Manrope, system-ui, sans-serif; -webkit-font-smoothing: antialiased; transition: background-color .4s, color .4s; }
+:focus-visible { outline: 2px solid rgb(var(--c1)); outline-offset: 3px; border-radius: 6px; }
+
+@layer components {
+  .glass { background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgb(var(--fg) / .1); }
+  .grad-text { background: linear-gradient(120deg, rgb(var(--c1)), rgb(var(--c2))); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]; }
+  .btn-primary { @apply btn text-white; background: linear-gradient(110deg, rgb(var(--c1)), rgb(var(--c2))); box-shadow: 0 0 0 0 rgba(139,92,246,0); transition: box-shadow .35s, transform .3s; }
+  .btn-primary:hover { box-shadow: 0 8px 30px -6px rgba(139,92,246,.55); }
+  .btn-ghost { @apply btn border border-line hover:border-a1/60 hover:bg-[var(--glass)]; }
+  .chip { @apply rounded-md border border-line px-2.5 py-1 text-xs font-semibold text-muted transition duration-200 hover:border-a1 hover:text-fg; }
+  .h2 { @apply font-display text-3xl font-extrabold tracking-tight sm:text-5xl; }
+  .fx { position: relative; transition: transform .35s ease-out, border-color .3s, box-shadow .35s; will-change: transform; }
+  .fx::before { content: ''; position: absolute; inset: 0; border-radius: inherit; opacity: 0; pointer-events: none; transition: opacity .3s; background: radial-gradient(320px circle at var(--x, 50%) var(--y, 50%), var(--spot), transparent 70%); }
+  .fx:hover::before { opacity: 1; }
+  .fx:hover { border-color: rgb(var(--c1) / .5); box-shadow: 0 16px 40px -18px rgba(139,92,246,.45); }
+  .line { border-color: rgb(var(--fg) / .12); }
+}
+
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+.page-in { animation: fade .7s ease both; }
+.hero-in { animation: rise-in .9s cubic-bezier(.2, .7, .2, 1) both; }
+.blob { animation: drift 20s ease-in-out infinite alternate; }
+.photo-in { animation: photo-rise 1s .3s cubic-bezier(.2, .7, .2, 1) both; }
+.photo-float { animation: float-y 7s ease-in-out infinite; }
+.photo-glow { animation: pulse-glow 5s ease-in-out infinite; }
+.float { animation: float-y 6s ease-in-out infinite; }
+.par { transition: transform .35s ease-out; will-change: transform; transform: translate3d(calc(var(--px, 0) * var(--d, 0) * 1px), calc(var(--py, 0) * var(--d, 0) * 1px), 0); }
+.particle { animation: drift-p linear infinite; }
+
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes photo-rise { from { opacity: 0; transform: translateY(30px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes float-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes pulse-glow { 0%, 100% { opacity: .55; } 50% { opacity: .95; } }
+@keyframes drift { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(70px, 40px, 0) scale(1.18); } }
+@keyframes drift-p { from { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } to { transform: translateY(-90vh); opacity: 0; } }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+}
